@@ -1,0 +1,47 @@
+<html>
+<head>
+  <title> Lab1_kpp </title>
+  <style>
+  #map {
+  height: 100%;
+}
+ html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+</style>
+</head>
+<body>
+ <div id="map"></div>
+    <script>
+     function initMap() {
+        var MyLatLng = {lat: 49.2328,lng: 28.481};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 5,
+          center: MyLatLng
+        });
+        var cityes = ["Vinnytsia", "Pohrebyshche", "Warszawa", "Kaunas", "Odessa"];
+
+        for (var i = 0; i < cityes.length; i++) {
+            fetch('https://api.openweathermap.org/data/2.5/weather?q=' + cityes[i] + '&appid=1b5ee5a1a74d624a74750350327ea372')
+                .then(function (response) {
+                    response.json().then(function (data) {
+                        var icon = data.weather[0].icon;
+                        var marker = new google.maps.Marker({
+                            position: {lat: data.coord.lat, lng: data.coord.lon},
+                            map: map,
+                            title: data.weather[0].description,
+                            icon: 'http://openweathermap.org/img/w/' + icon + '.png'
+                        });
+                    });
+                });
+        }
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyyandSnVmPD3pKXmeeuaVSuRxki_P4WE&callback=initMap"
+    async defer>
+    </script>
+</body>
+</html>
